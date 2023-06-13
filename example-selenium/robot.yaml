@@ -1,0 +1,34 @@
+# For more details on the format and content:
+# https://github.com/robocorp/rcc/blob/master/docs/recipes.md#what-is-in-robotyaml
+
+tasks:
+  # Task names here are used when executing the bots, so renaming these is recommended.
+    Run Example tasks:
+      shell: python -m robot --outputdir output --logtitle "Task log" tasks.robot
+
+    Run Console output tasks:
+      shell: python -m robot --outputdir output --logtitle "Task log" console_output.robot
+    
+    Run Shadow dom example tasks:
+      shell: python -m robot --outputdir output --logtitle "Task log" shadow_example.robot
+
+  # Run Example task:
+  #   robotTaskName: Browser Log Cases
+
+condaConfigFile: conda.yaml
+
+environmentConfigs:
+  - environment_windows_amd64_freeze.yaml
+  - environment_linux_amd64_freeze.yaml
+  - environment_darwin_amd64_freeze.yaml
+  - conda.yaml
+
+artifactsDir: output  
+PATH:
+  - .
+PYTHONPATH:
+  - keywords
+  - resources
+  - libraries
+ignoreFiles:
+  - .gitignore
