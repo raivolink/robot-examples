@@ -11,6 +11,9 @@ tasks:
     
     Run Shadow dom example tasks:
       shell: python -m robot --outputdir output --logtitle "Task log" shadow_example.robot
+    
+    Run Proxy example tasks:
+      shell: python -m robot --outputdir output --logtitle "Task log" proxy.robot
 
   # Run Example task:
   #   robotTaskName: Browser Log Cases

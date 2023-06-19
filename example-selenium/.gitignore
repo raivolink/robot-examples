@@ -18,3 +18,5 @@ testrun/*
 report*
 log*
 *output.xml
+prox.py
+*.png
