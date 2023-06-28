@@ -15,9 +15,3 @@ temp/
 testrun/*
 .~lock*
 *.pkl
-report*
-log*
-*output.xml
-prox.py
-*.png
-geckodriver.log
