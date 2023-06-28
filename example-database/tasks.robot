@@ -4,7 +4,7 @@ Documentation       Database examples using RPA.Database
 Library             RPA.Database
 Library             TablePrint.py
 
-Task Setup          Connect to Nortwind
+Task Setup          Connect to Northwind
 Task Teardown       Disconnect From Database
 
 
@@ -34,5 +34,5 @@ Simple Query
     ${rows}    Query    ${simple_query}
     Log Table    ${rows}
 
-Connect to Nortwind
+Connect to Northwind
     Connect To Database    sqlite3    northwind.db

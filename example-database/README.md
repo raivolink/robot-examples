@@ -1,4 +1,8 @@
-# Template: Standard Robot Framework
+# Simple database robot
+
+Simple robot using SQLite for data source. Has custom keyword for nicer log from Robotframework
+ 
+## Template: Standard Robot Framework
 
 This is the simplest template to start from.
 
