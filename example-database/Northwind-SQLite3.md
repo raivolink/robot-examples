@@ -1,4 +1,4 @@
-# [Northwind-SQLite3](https://github.com/jpwhite3/northwind-SQLite3)
+# Northwind-SQLite3
 
 This is a version of the Microsoft Access 2000 Northwind sample database, re-engineered for SQLite3.
 
