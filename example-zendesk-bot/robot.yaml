@@ -2,10 +2,11 @@
 # https://github.com/robocorp/rcc/blob/master/docs/recipes.md#what-is-in-robotyaml
 
 tasks:
-  Produce:
-    robotTaskName: Produce items
-  Consume:
-    robotTaskName: Consume items
+  Process Zendesk Request:
+    robotTaskName: Consume Zendesk Request
+
+  Update Zendesk Ticket:
+    robotTaskName: Update Zendesk
 
 condaConfigFile: conda.yaml
 
