@@ -1,34 +1,40 @@
-# Template for producer-consumer model robots using work items
+# Example robot using Zendesk
 
-This template contains a working robot implementation that has the basic structure where one part produces work items from input and another part that consumes those work items. 
+This example contains a robot implementation that has the basic structure where one part consumes work items created from Zendesk and another part that consumes work items produced on previous step to update Zendesk ticket.
 
-> The [producer-consumer](https://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem) model is not limited to two steps, it can continue so that the consumer generates further work items for the next step and so on.
+## Prerequisites
 
-The template tries to keep the amount of functional code at a minimum so you have less to clear out and replace with your own implementation, but some functional logic is needed to have the template working and guiding the key parts.
+To run the example some preparation steps are needed.
 
-> We recommended checking out the article "[Using work items](https://robocorp.com/docs/development-guide/control-room/work-items)" before diving in.
+### Zendesk
 
+- Create webhook that will use Robocorp API to launch the process
+- Create API access token(or any access that allows usage of API)
+- For this example Zendesk macro was used to trigger webhook. Macro assigns tag to ticket and this triggers robot.
 
-> Also a fully functional example robot can be found at: [Web Store Order Processor Using Work Items](https://robocorp.com/portal/robot/robocorp/example-web-store-work-items)
+### Control Room
 
+- Set up API key if none is created.
+- Use API helper to configure endpoint _Start process with a single work item payload_
+- Create process and add steps
+- Create Vault entry, example uses ZendeskService as secret name.
+- Create asset, example uses Zendesk-comment as asset name.
 
 ## Tasks
 
-The robot is split into two tasks, meant to run as separate steps in Control Room. The first task generates (produces) data, and the second one reads (consumes) and processes that data.
+The robot is split into two tasks, meant to run as separate steps in Control Room. The first task consumes data sent from Zendesk and produces information for next step, and the second one reads and processes that data to update Zendesk ticket.
 
-### The first task (the producer)
+### The first task - Consume Zendesk Request
 
-- Load the example Excel file from work item
-- Splits the Excel file into work items for the consumer
+- Loads data from work item payload
+- Generates message from data and creates output work item
 
-### The second task (the consumer)
+This step can used for various actions, for example retriveing information from another systems, data man
 
-> We recommended checking out the article "[Work item exception handling](https://robocorp.com/docs/development-guide/control-room/work-items#work-item-exception-handling)" before diving in.
+### The second task - Send Zendesk Ticket Update
 
-- A simulated "Login" step.
-  - This simulates random failures to highlight the use of `APPLICATION` -exception type.
-- Loop that handles the work items and just creates a logs row for each
-  - This simulates random failures to highlight the use of `BUSINESS` -exception type.
+- Reads ticket id and message from work item
+- Updates give ticket in Zendesk with message from work item
 
 ### Local testing
 

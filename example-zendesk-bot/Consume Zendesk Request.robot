@@ -1,15 +1,13 @@
 *** Settings ***
 Library     Collections
-Library     RPA.Browser.Selenium
 Library     RPA.Robocorp.WorkItems
 Library     RPA.Tables
 
 
 *** Tasks ***
-Consume items
+Consume Zendesk Request
     [Documentation]    Login and then cycle through work items.
     TRY
-        Login
         For Each Input Work Item    Handle item
     EXCEPT    AS    ${err}
         Log    ${err}    level=ERROR
@@ -26,7 +24,9 @@ Login
     [Documentation]
     ...    Simulates a login that fails 1/5 times to highlight APPLICATION exception handling.
     ...    In this example login is performed only once for all work items.
+    ...
     ${Login as James Bond}=    Evaluate    random.randint(1, 5)
+
     IF    ${Login as James Bond} != 1
         Log    Logged in as Bond. James Bond.
     ELSE
@@ -35,24 +35,24 @@ Login
 
 Action for item
     [Documentation]
-    ...    Simulates handling of one work item that fails 1/5 times in
-    ...    two different ways to highlight BUSINESS and APPLICATION exception handling
-    ...    and how you can handle each differently from the main "Handle item" keyword.
+    ...    Gets Zendesk request and processes payload
     [Arguments]    ${payload}
-    ${Item Action OK}=    Evaluate    random.randint(1, 15)
-    IF    ${Item Action OK} not in [1,2,3]
-        Log    Did the first thing for: ${payload}
-    ELSE IF    ${Item Action OK} == 1
-        Fail    Invalid data in payload: ${payload}.
-    ELSE IF    ${Item Action OK} == 2
-        Fail    Application timed out, try again later.
-    ELSE IF    ${Item Action OK} == 3
-        Fail    I'm an unexpected error
-    END
+
+    ${requester_email}=    Get Work Item Variable    requester_mail
+    ${ticket_id}=    Get Work Item Variable    ticket_id
+
+    &{variables}=    Create Dictionary
+    ...    requester_mail    ${requester_email}
+    ...    ticket_id    ${ticket_id}
+    ...    message    Requester with mail:${requester_email} and request id:${ticket_id}
+
+    Create Output Work Item    variables=${variables}    save=${True}
 
 Handle item
     [Documentation]    Error handling around one work item.
+
     ${payload}=    Get Work Item Variables
+
     TRY
         Action for item    ${payload}
         Release Input Work Item    DONE
