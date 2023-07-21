@@ -105,11 +105,11 @@ def get_supplier_data(transactions_table, bank_page_id):
     """Gets supplier names from banking app.
 
     Args:
-        transactions_table: Tables object containing transactions
-        bank_page_id: Page for interaction page
+        transactions_table (Table): Table containing transactions
+        bank_page_id (Page): Page for interaction page
 
     Returns:
-        Tables object with added supplier names
+        Table: Table with supplier names added
 
     """
     Tables().sort_table_by_column(transactions_table, "Account")
@@ -148,6 +148,7 @@ def get_supplier_data(transactions_table, bank_page_id):
             # break file loop if transaction was processed
             break
     context.set_default_timeout(30000)
+
     log.info(transactions_table)
     return transactions_table
 
