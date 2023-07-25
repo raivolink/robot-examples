@@ -1,6 +1,7 @@
 from robocorp import browser, log
 from robocorp.tasks import task
 from RPA.Tables import Tables
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 CHALLENGE_URL = "https://developer.automationanywhere.com/challenges/financialvalidation-challenge.html"
 username = "finance_dept@foodmartgrocerycorp.com"
@@ -30,10 +31,10 @@ def start_challenge():
         browser_engine="chromium",
         screenshot="only-on-failure",
         # headless=False,
-        # slowmo=500,   # uncomment to introduce bank crashes
+        # slowmo=500,  # uncomment to introduce bank crashes
     )
     context = browser.context()
-    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36"
+    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36"  # noqa: E501
     context.set_extra_http_headers({"User-Agent": user_agent})
     browser.goto(CHALLENGE_URL)
 
@@ -82,8 +83,9 @@ def login_to_rusty_bank():
 
     try:
         bank_app_page.click("//*[@id='onetrust-accept-btn-handler']")
-    except:
+    except PlaywrightTimeoutError:
         log.info("No cookies for robot")
+
     bank_login(bank_app_page)
     return bank_app_page
 
@@ -138,7 +140,7 @@ def get_supplier_data(transactions_table, bank_page_id):
                 supplier = bank_page_id.query_selector("xpath=(//td)[5]").inner_text()
 
                 Tables().set_table_cell(transactions_table, index, "Supplier", supplier)
-            except:
+            except PlaywrightTimeoutError:
                 # If error was encountered it means bank page crashed
                 bank_page_id.click("//button[contains(text(),'Take')]")
                 bank_login(bank_page_id)
@@ -149,7 +151,6 @@ def get_supplier_data(transactions_table, bank_page_id):
             break
     context.set_default_timeout(30000)
 
-    log.info(transactions_table)
     return transactions_table
 
 
@@ -157,7 +158,7 @@ def fill_suppliers(transactions_table):
     """Adds supplier names on initial transaction page
 
     Args:
-        transactions_table (Table): Table containing financial transactions with supplier data
+        transactions_table (Table): Table containing transactions with supplier data
     """
     page = browser.page()
     page.bring_to_front()
