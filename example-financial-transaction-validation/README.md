@@ -2,7 +2,7 @@
 
 This example robot completes the supply chain challenge at <https://developer.automationanywhere.com/challenges/financialvalidation-challenge.html>
 
-## More in detail, this bot will:
+## More in detail, this automation will
 
 - Start the challenge by opening the challenge page
 - Create table of transactions
@@ -12,8 +12,8 @@ This example robot completes the supply chain challenge at <https://developer.au
 
 ## Screens
 
-<img src="images/financial-transactions.png" style="margin: 20px 0px 0px 0px">
-<img src="images/bank-records.png" style="margin: 0px 0px 20px 0px">
+<img src="images/financial-transactions.png" style="margin-top: 10px;">
+<img src="images/bank-records.png" style="margin:10px 0px;width: 1151px;">
 
 ## Robot
 

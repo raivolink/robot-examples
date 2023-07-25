@@ -24,6 +24,7 @@ def solve_ai_challenge():
     patient_cases = get_structured_data_from_gpt(patient_cases)
     fill_patient_data(patient_cases)
     submit_challenge()
+    log.console_message("Challenge completed", "regular")
 
 
 def start_ai_challenge():
@@ -90,7 +91,7 @@ def ask_gpt(conversation):
     """Conversation with gpt
 
     Args:
-        conversation (_type_): current conversation with gpt
+        conversation (OpenAIObject): current conversation with gpt
 
     Returns:
         OpenAIObject: Gpt conversation
@@ -111,7 +112,7 @@ def get_structured_data_from_gpt(patient_cases):
     patient diagnosis data
 
     Args:
-        patient_cases (_type_): Data with patient diagnosis
+        patient_cases (List): Data with patient diagnosis
 
     Returns:
         List: Data with patient diagnosis with gpt response added
