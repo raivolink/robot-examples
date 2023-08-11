@@ -1,6 +1,6 @@
 # A robot that completes the healthcare challenge
 
-This example robot completes the supply chain challenge at <https://developer.automationanywhere.com/challenges/healthcare-ai-challenge.html>
+This example robot completes the supply chain challenge at <https://developer.automationanywhere.com/challenges/healthcare-ai-challenge.html>. Automation expects vault secret with ChatGpt key to be available!
 
 ## More in detail, this automation will
 
