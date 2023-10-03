@@ -16,3 +16,6 @@ testrun/*
 .~lock*
 *.pkl
 devdata/
+report.html
+log.html
+output.xml

@@ -20,7 +20,8 @@ log*
 *output.xml
 prox.py
 *.png
-geckodriver*
+*geckodriver.log
 keywords/
 libraries/
 resources/
+devdata/
