@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.1.1 (Python 3.10.12 on win32)" generated="20231003 15:54:31.886" rpa="true" schemaversion="4">
+<suite id="s1" name="Tasks" source="c:\Users\Raivo\Documents\GitHub\robot-examples\example-database\tasks.robot">
+<test id="s1-t1" name="Minimal task" line="12">
+<kw name="Connect to Northwind" type="SETUP">
+<kw name="Connect To Database" library="RPA.Database">
+<arg>sqlite3</arg>
+<arg>northwind.db</arg>
+<doc>Connect to database using DB API 2.0 module.</doc>
+<msg timestamp="20231003 15:54:32.820" level="INFO">Protecting keyword: RPA.Database.Connect To Database</msg>
+<msg timestamp="20231003 15:54:32.915" level="INFO">Log level changed from NONE to INFO.</msg>
+<status status="PASS" starttime="20231003 15:54:32.819" endtime="20231003 15:54:32.914"/>
+</kw>
+<status status="PASS" starttime="20231003 15:54:32.819" endtime="20231003 15:54:32.915"/>
+</kw>
+<kw name="Query using WITH">
+<kw name="Catenate" library="BuiltIn">
+<var>${with_query}</var>
+<arg>SEPARATOR=</arg>
+<arg>WITH cte_quantity AS</arg>
+<arg>(SELECT SUM(Quantity) as Total${SPACE}</arg>
+<arg>FROM 'Order Details' GROUP BY ProductID)</arg>
+<arg>SELECT AVG(Total) average_product_quantity${SPACE}</arg>
+<arg>FROM cte_quantity</arg>
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<msg timestamp="20231003 15:54:32.918" level="INFO">${with_query} = WITH cte_quantity AS(SELECT SUM(Quantity) as Total FROM 'Order Details' GROUP BY ProductID)SELECT AVG(Total) average_product_quantity FROM cte_quantity</msg>
+<status status="PASS" starttime="20231003 15:54:32.917" endtime="20231003 15:54:32.930"/>
+</kw>
+<kw name="Query" library="RPA.Database">
+<var>@{rows}</var>
+<arg>${with_query}</arg>
+<doc>Execute a SQL query and optionally return the execution result.</doc>
+<msg timestamp="20231003 15:54:32.932" level="INFO">Executing query: WITH cte_quantity AS(SELECT SUM(Quantity) as Total FROM 'Order Details' GROUP BY ProductID)SELECT AVG(Total) average_product_quantity FROM cte_quantity</msg>
+<msg timestamp="20231003 15:54:32.939" level="INFO">@{rows} = [ (666.4545454545455,) ]</msg>
+<status status="PASS" starttime="20231003 15:54:32.931" endtime="20231003 15:54:32.939"/>
+</kw>
+<kw name="Log" library="BuiltIn">
+<arg>${rows}</arg>
+<arg>console=${True}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20231003 15:54:32.940" level="INFO">[(666.4545454545455,)]</msg>
+<status status="PASS" starttime="20231003 15:54:32.940" endtime="20231003 15:54:32.942"/>
+</kw>
+<status status="PASS" starttime="20231003 15:54:32.916" endtime="20231003 15:54:32.942"/>
+</kw>
+<kw name="Simple Query">
+<kw name="Catenate" library="BuiltIn">
+<var>${simple_query}</var>
+<arg>SEPARATOR=</arg>
+<arg>SELECT * FROM Products</arg>
+<doc>Catenates the given items together and returns the resulted string.</doc>
+<msg timestamp="20231003 15:54:32.942" level="INFO">${simple_query} = SELECT * FROM Products</msg>
+<status status="PASS" starttime="20231003 15:54:32.942" endtime="20231003 15:54:32.942"/>
+</kw>
+<kw name="Query" library="RPA.Database">
+<var>${rows}</var>
+<arg>${simple_query}</arg>
+<doc>Execute a SQL query and optionally return the execution result.</doc>
+<msg timestamp="20231003 15:54:32.942" level="INFO">Executing query: SELECT * FROM Products</msg>
+<msg timestamp="20231003 15:54:32.950" level="INFO">${rows} = Table(columns=['ProductID', 'ProductName', 'SupplierID', 'CategoryID', 'QuantityPerUnit', 'UnitPrice', 'UnitsInStock', 'UnitsOnOrder', 'ReorderLevel', 'Discontinued'], rows=77)</msg>
+<status status="PASS" starttime="20231003 15:54:32.942" endtime="20231003 15:54:32.950"/>
+</kw>
+<kw name="Log Table" library="TablePrint">
+<arg>${rows}</arg>
+<doc>Print table content to console
+:param columns: maximum columns to print
+:param rows: maximum rows to print
+:param log_to_console: logs table to console
+Example.
+.. code-block:: robotframework
+    Log Table
+    ...  columns=3
+    ...  rows=10</doc>
+<msg timestamp="20231003 15:54:32.952" level="INFO">
++-----------+------------------------------+------------+------------+---------------------+-----------+--------------+--------------+--------------+--------------+
+| ProductID |         ProductName          | SupplierID | CategoryID |   QuantityPerUnit   | UnitPrice | UnitsInStock | UnitsOnOrder | ReorderLevel | Discontinued |
++-----------+------------------------------+------------+------------+---------------------+-----------+--------------+--------------+--------------+--------------+
+|     1     |             Chai             |     1      |     1      |  10 boxes x 20 bags |     18    |      39      |      0       |      10      |      0       |
+|     2     |            Chang             |     1      |     1      |  24 - 12 oz bottles |     19    |      17      |      40      |      25      |      0       |
+|     3     |        Aniseed Syrup         |     1      |     2      | 12 - 550 ml bottles |     10    |      13      |      70      |      25      |      0       |
+|     4     | Chef Anton's Cajun Seasoning |     2      |     2      |    48 - 6 oz jars   |     22    |      53      |      0       |      0       |      0       |
+|     5     |    Chef Anton's Gumbo Mix    |     2      |     2      |       36 boxes      |   21.35   |      0       |      0       |      0       |      1       |
++-----------+------------------------------+------------+------------+---------------------+-----------+--------------+--------------+--------------+--------------+</msg>
+<status status="PASS" starttime="20231003 15:54:32.951" endtime="20231003 15:54:32.953"/>
+</kw>
+<status status="PASS" starttime="20231003 15:54:32.942" endtime="20231003 15:54:32.954"/>
+</kw>
+<kw name="Disconnect From Database" library="RPA.Database" type="TEARDOWN">
+<doc>Close connection to SQL database</doc>
+<status status="PASS" starttime="20231003 15:54:32.954" endtime="20231003 15:54:32.956"/>
+</kw>
+<status status="PASS" starttime="20231003 15:54:32.818" endtime="20231003 15:54:32.956"/>
+</test>
+<doc>Database examples using RPA.Database</doc>
+<status status="PASS" starttime="20231003 15:54:31.907" endtime="20231003 15:54:32.958"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tasks</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="Tasks">Tasks</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
