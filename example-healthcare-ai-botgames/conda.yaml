@@ -6,11 +6,11 @@ channels:
   - conda-forge
 
 dependencies:
-  - python=3.9.16                 # https://pyreadiness.org/3.9
-  - pip=22.1.2                    # https://pip.pypa.io/en/stable/news
+  - python=3.10.12                 # https://pyreadiness.org/3.9
+  - pip=23.2.1                    # https://pip.pypa.io/en/stable/news
   - pip:
-    - robocorp==0.10.0             # https://pypi.org/project/robocorp
+    - robocorp==1.0.0             # https://pypi.org/project/robocorp
     - robocorp-browser==2.1.0     # https://pypi.org/project/robocorp-browser
     - robocorp-excel==0.4.0       # https://pypi.org/project/robocorp-excel
     - robocorp-http==0.4.0        # https://pypi.org/project/robocorp-http
-    - openai==0.27.9              # https://pypi.org/project/openai/
+    - openai==0.28.1              # https://pypi.org/project/openai/

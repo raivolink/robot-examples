@@ -8,7 +8,7 @@ Library             RPA.Browser.Selenium
 *** Variables ***
 ${IP_CHECK_URL}     http://httpbin.org/ip
 ${IP_CHECK_URL2}    https://whatismyipaddress.com/
-${PROXY}            3.110.142.87:80
+${PROXY}            3.110.142.87:80    # need ro be updated to curretnly available
 
 
 *** Tasks ***

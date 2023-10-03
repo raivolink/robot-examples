@@ -29,8 +29,7 @@ Query using WITH
 Simple Query
     ${simple_query}    Catenate
     ...    SEPARATOR=
-    ...    SELECT *
-    ...    FROM Products
+    ...    SELECT * FROM Products
     ${rows}    Query    ${simple_query}
     Log Table    ${rows}
 
