@@ -9,8 +9,8 @@ dependencies:
   - python=3.10.12                 # https://pyreadiness.org/3.9
   - pip=23.2.1                    # https://pip.pypa.io/en/stable/news
   - pip:
-    - robocorp==1.0.0             # https://pypi.org/project/robocorp
-    - robocorp-browser==2.1.0     # https://pypi.org/project/robocorp-browser
-    - robocorp-excel==0.4.0       # https://pypi.org/project/robocorp-excel
+    - robocorp==1.2.4             # https://pypi.org/project/robocorp
+    - robocorp-browser==2.2.1     # https://pypi.org/project/robocorp-browser
+    - robocorp-excel==0.4.1       # https://pypi.org/project/robocorp-excel
     - robocorp-http==0.4.0        # https://pypi.org/project/robocorp-http
-    - openai==0.28.1              # https://pypi.org/project/openai/
+    - openai==1.3.9              # https://pypi.org/project/openai/
