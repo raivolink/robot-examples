@@ -15,5 +15,5 @@ temp/
 testrun/*
 .~lock*
 *.pkl
-
+__pyc*
 challenge.xlsx

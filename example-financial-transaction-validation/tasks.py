@@ -1,6 +1,6 @@
 from robocorp import browser, log
 from robocorp.tasks import task
-from RPA.Tables import Tables
+from RPA.Tables import Tables  # type: ignore
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 
 CHALLENGE_URL = "https://developer.automationanywhere.com/challenges/financialvalidation-challenge.html"

@@ -13,4 +13,4 @@ dependencies:
     - robocorp-browser==2.2.1     # https://pypi.org/project/robocorp-browser
     - robocorp-excel==0.4.1       # https://pypi.org/project/robocorp-excel
     - robocorp-http==0.4.0        # https://pypi.org/project/robocorp-http
-    - openai==1.3.9              # https://pypi.org/project/openai/
+    - openai==0.28.1              # https://pypi.org/project/openai/
