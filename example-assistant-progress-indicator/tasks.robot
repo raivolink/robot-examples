@@ -16,7 +16,7 @@ ${STEP_DELAY}       0.4
 *** Tasks ***
 Complete rpa challenge
     [Documentation]
-    ...    The completes rpa challenges and
+    ...    The completes rpa challenge and
     ...    displays process progress
 
     Display Process Run
@@ -34,6 +34,8 @@ Complete rpa challenge
 
 *** Keywords ***
 Display Process Run
+    [Documentation]    Main keyword to build dialog used for
+    ...    for the process run
     Clear Dialog
     Add Heading    Spinner Example
     Open Row
