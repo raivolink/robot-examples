@@ -1,7 +1,9 @@
 *** Settings ***
-Library     RPA.Browser.Selenium
-Library     RPA.HTTP
-Library     RPA.Excel.Files
+Documentation       Keywords for robot solving automation challenge
+
+Library             RPA.Browser.Selenium
+Library             RPA.HTTP
+Library             RPA.Excel.Files
 
 
 *** Keywords ***

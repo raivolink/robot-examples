@@ -1,6 +1,6 @@
 # Example robot with progress indicators
 
-RObot that uses dialof to initiate the process and displays progress during processing
+Robot that uses dialof to initiate the process and displays progress during processing
 
 More about [attended vs. unattended robots](https://robocorp.com/docs/control-room/attended-or-unattended) and specifically [attended automations](https://robocorp.com/docs/control-room/attended)
 

@@ -14,10 +14,10 @@ ${STEP_DELAY}       0.4
 
 
 *** Tasks ***
-Main
+Complete rpa challenge
     [Documentation]
-    ...    The Main task running the Assistant
-    ...    Configure your window behaviour here
+    ...    The completes rpa challenge and
+    ...    displays process progress
 
     Display Process Run
     ${result}    RPA.Assistant.Run Dialog
@@ -34,6 +34,8 @@ Main
 
 *** Keywords ***
 Display Process Run
+    [Documentation]    Main keyword to build dialog used for
+    ...    for the process run
     Clear Dialog
     Add Heading    Spinner Example
     Open Row
@@ -45,13 +47,17 @@ Display Process Run
 Show Process Progress With Indicator
     [Documentation]    Adds process progess indicator and processes records
     [Arguments]    ${process_indicator}=bar
+
     ${process_indicator}    Convert To Lower Case    ${process_indicator}
     Set Title    Process Running
     Start the challenge
     ${people}    Get the list of people from the Excel file
+    # calculate ticks for indicator
     ${records}    Get Length    ${people}
     ${tick}    Evaluate    ${records} / 100
+
     Click Button    Start
+
     FOR    ${index}    ${person}    IN ENUMERATE    @{people}    start=1
         Clear Dialog
         Add Heading    Process Running
@@ -71,6 +77,7 @@ Show Process Progress With Indicator
         Fill and submit the form    ${person}
         Sleep    ${STEP_DELAY}
     END
+
     Clear Dialog
     Open Row
     Set Title    Process Completed
@@ -78,4 +85,5 @@ Show Process Progress With Indicator
     Add Submit Buttons    buttons=Close    default=Close
     Close Row
     Refresh Dialog
+
     Close All Browsers
