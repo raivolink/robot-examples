@@ -85,5 +85,3 @@ Show Process Progress With Indicator
     Add Submit Buttons    buttons=Close    default=Close
     Close Row
     Refresh Dialog
-
-    Close All Browsers
