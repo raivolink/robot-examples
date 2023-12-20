@@ -3,14 +3,12 @@ from pathlib import Path
 import polars as pl
 from robocorp.tasks import get_output_dir, task
 
-from RPA.Excel.Files import Files as Excel
 from RPA.HTTP import HTTP
 
 OUTPUT_DIR = get_output_dir() or Path("output")
 CSV_PATH = OUTPUT_DIR / "customers.csv"
 URL = "https://developer.automationanywhere.com/challenges/automationanywherelabs-customeronboarding.html"
 output = get_output_dir() or Path("output")
-# TODO Add documentation
 
 
 @task
@@ -19,17 +17,21 @@ def solve_challenge():
     browser.configure(
         browser_engine="chromium",
         screenshot="only-on-failure",
-        headless=False,
+        headless=True,
     )
-
+    # user_agent is neede for headless runs
+    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    context = browser.context()
+    context.set_extra_http_headers({"User-Agent": user_agent})
+    # navigate to challenge page
     browser.goto(URL)
-
+    # get customer data as dataframe
     df_customers = get_customers_data()
-
+    # fill data to crm
     for customer in df_customers.rows(named=True):
         fill_and_submit_form(customer)
-
-    completion_verification()
+    # log screenshot and challlenge id
+    challenge_verification()
 
 
 def fill_and_submit_form(customer):
@@ -60,10 +62,10 @@ def get_customers_data():
     return df_customers
 
 
-def completion_verification():
+def challenge_verification():
     page = browser.page()
     page.wait_for_selector("css=.modal-body")
     completion_modal = page.locator("css=.modal-body")
     browser.screenshot(completion_modal)
     completion_id = page.locator("id=guidvalue").input_value()
-    log.info(f"Completion id: {completion_id}")
+    log.info(f"Challenge completion id: {completion_id}")

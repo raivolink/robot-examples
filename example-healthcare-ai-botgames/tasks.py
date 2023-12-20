@@ -34,6 +34,7 @@ def start_ai_challenge():
         screenshot="only-on-failure",
     )
     context = browser.context()
+    # user_agent is neede for headless runs
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36"
     context.set_extra_http_headers({"User-Agent": user_agent})
     browser.goto(CHALLENGE_URL)
