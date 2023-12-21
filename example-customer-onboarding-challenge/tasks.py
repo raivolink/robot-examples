@@ -8,7 +8,6 @@ from RPA.HTTP import HTTP
 OUTPUT_DIR = get_output_dir() or Path("output")
 CSV_PATH = OUTPUT_DIR / "customers.csv"
 URL = "https://developer.automationanywhere.com/challenges/automationanywherelabs-customeronboarding.html"
-output = get_output_dir() or Path("output")
 
 
 @task
