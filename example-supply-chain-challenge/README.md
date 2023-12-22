@@ -9,25 +9,14 @@ The robot uses the [robocorp-playwright](https://robocorp.com/docs/python/roboco
 ```python
 @task
 def solve_challenge():
-    """Solve the RPA challenge"""
-    browser.configure(
-        browser_engine="chromium",
-        screenshot="only-on-failure",
-        headless=True,
-    )
-    # user_agent is neede for headless runs
-    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    context = browser.context()
-    context.set_extra_http_headers({"User-Agent": user_agent})
-    # navigate to challenge page
-    browser.goto(URL)
-    # get customer data as dataframe
-    df_customers = get_customers_data()
-    # fill data to crm
-    for customer in df_customers.rows(named=True):
-        fill_and_submit_form(customer)
-    # log screenshot and challlenge id
-    challenge_verification()
+    """Complete the supply chain challenge"""
+    launch_browser()
+    open_procurement_website_and_log_in()
+    purchase_order_page = open_po_page()
+    agents_df = get_agents(purchase_order_page)
+    po_numbers = get_po_numbers(purchase_order_page)
+    get_po_data_and_insert_to_form(agents_df, po_numbers, purchase_order_page)
+    challenge_verification(purchase_order_page)
 ```
 
 For more information, do not forget to checkout the following:
