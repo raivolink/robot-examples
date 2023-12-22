@@ -12,25 +12,34 @@ URL = "https://developer.automationanywhere.com/challenges/automationanywherelab
 
 @task
 def solve_challenge():
-    """Solve the RPA challenge"""
+    """Complete Customer onboarding challenge"""
+    launch_browser_and_open_challenge()
+    # get customer data as dataframe
+    df_customers = get_customers_data()
+    # insert data to form
+    complete_challenge(df_customers)
+    # log screenshot and challlenge id
+    challenge_verification()
+
+
+def launch_browser_and_open_challenge():
     browser.configure(
         browser_engine="chromium",
         screenshot="only-on-failure",
         headless=True,
     )
-    # user_agent is neede for headless runs
+    # user_agent is needed for headless runs
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     context = browser.context()
     context.set_extra_http_headers({"User-Agent": user_agent})
     # navigate to challenge page
     browser.goto(URL)
-    # get customer data as dataframe
-    df_customers = get_customers_data()
+
+
+def complete_challenge(df_customers):
     # fill data to crm
     for customer in df_customers.rows(named=True):
         fill_and_submit_form(customer)
-    # log screenshot and challlenge id
-    challenge_verification()
 
 
 def fill_and_submit_form(customer):
