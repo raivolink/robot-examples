@@ -1,7 +1,7 @@
 from robocorp import browser, log
 from pathlib import Path
 import polars as pl
-from robocorp.tasks import get_output_dir, task
+from robocorp.tasks import get_output_dir, task, task_cache
 
 from RPA.HTTP import HTTP
 
@@ -17,9 +17,9 @@ def solve_challenge():
     launch_browser()
     open_procurement_website_and_log_in()
     purchase_order_page = open_po_page()
-    df_agents = get_agents(purchase_order_page)
+    agents_df = get_agents(purchase_order_page)
     po_numbers = get_po_numbers(purchase_order_page)
-    get_po_data_and_insert_to_form(df_agents, po_numbers, purchase_order_page)
+    get_po_data_and_insert_to_form(agents_df, po_numbers, purchase_order_page)
     challenge_verification(purchase_order_page)
 
 
@@ -29,15 +29,15 @@ def launch_browser():
         screenshot="only-on-failure",
         headless=False,
     )
-    # user_agent is neede for headless runs
+    # user_agent is needed for headless runs
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     context = browser.context()
     context.set_extra_http_headers({"User-Agent": user_agent})
 
 
+@task_cache
 def open_po_page():
-    context = browser.context()
-    purchase_order_page = context.new_page()
+    purchase_order_page = browser.context().new_page()
     purchase_order_page.goto(PURCHASE_ORDERS_URL)
     return purchase_order_page
 
@@ -65,7 +65,7 @@ def search_for_po(po_number, page):
 
 def get_po_data_and_insert_to_form(df_agents, po_numbers, purchase_order_page):
     page = browser.page()
-    page.bring_to_front()
+    # page.bring_to_front()
     for po in po_numbers:
         # TODO Clearer logic(using enumerate?)
         search_for_po(po_numbers[po], page)
@@ -73,13 +73,14 @@ def get_po_data_and_insert_to_form(df_agents, po_numbers, purchase_order_page):
         ship_date = page.locator("#dtBasicExample td:nth-child(7)").inner_text()
         order_total = page.locator("#dtBasicExample td:nth-child(8)").inner_text()[1:]
         agent_in_state = df_agents.filter(df_agents["State"] == state)
-        print(state, ship_date, order_total, agent_in_state["Full Name"][0])
+        agent_name = agent_in_state["Full Name"][0]
         # TODO Change logic for not switch pages
+        current_po_index = po[-1]  # slice last value from string
         fill_po_form(
-            po[-1],
+            current_po_index,
             ship_date,
             order_total,
-            agent_in_state["Full Name"][0],
+            agent_name,
             purchase_order_page,
         )
 
@@ -96,7 +97,7 @@ def open_procurement_website_and_log_in():
 
 
 def fill_po_form(index, ship_date, total, agent, purchase_order_page):
-    purchase_order_page.bring_to_front()
+    # purchase_order_page.bring_to_front()
     purchase_order_page.fill(f"#shipDate{index}", str(ship_date))
     purchase_order_page.fill(f"#orderTotal{index}", str(total))
     purchase_order_page.query_selector(f"#agent{index}").select_option(str(agent))
