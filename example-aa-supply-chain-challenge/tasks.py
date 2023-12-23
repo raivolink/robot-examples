@@ -1,7 +1,7 @@
 from robocorp import browser, log
 from pathlib import Path
 import polars as pl
-from robocorp.tasks import get_output_dir, task, task_cache
+from robocorp.tasks import get_output_dir, task
 
 from RPA.HTTP import HTTP
 
@@ -35,7 +35,6 @@ def launch_browser():
     context.set_extra_http_headers({"User-Agent": user_agent})
 
 
-@task_cache
 def open_po_page():
     purchase_order_page = browser.context().new_page()
     purchase_order_page.goto(PURCHASE_ORDERS_URL)
