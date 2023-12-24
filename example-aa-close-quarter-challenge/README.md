@@ -1,6 +1,6 @@
 # Quarter Close Challenge
 
-<img src="images/transaction-review-website.png" style="margin-bottom:20px">
+<img src="images/transaction-review-website.png" style="margin-bottom:20px" alt="transactions">
 
 This robot solves the [Quarter Close Challenge](https://developer.automationanywhere.com/challenges/automationanywherelabs-quarterclose.html).
 
@@ -13,7 +13,7 @@ This robot solves the [Quarter Close Challenge](https://developer.automationanyw
 The robot uses the [robocorp-browser](https://robocorp.com/docs/python/robocorp/robocorp-browser) library for browser automation.
 
 ```python
-*@task
+@task
 def solve_challenge():
     """Complete Close quarter challenge"""
     launch_browser()
