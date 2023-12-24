@@ -42,7 +42,7 @@ def open_po_page():
 
 
 def get_agents(purchase_order_page):
-    download_xlsx_element = purchase_order_page.query_selector(".challenge-intro a.btn")
+    download_xlsx_element = purchase_order_page.locator(".challenge-intro a.btn")
     csv_url = download_xlsx_element.get_attribute("href")
     HTTP().download(csv_url, EXCEL_PATH, overwrite=True)
     df_agents = pl.read_excel(EXCEL_PATH)
