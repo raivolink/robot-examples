@@ -99,7 +99,7 @@ def fill_po_form(index, ship_date, total, agent, purchase_order_page):
     # purchase_order_page.bring_to_front()
     purchase_order_page.fill(f"#shipDate{index}", str(ship_date))
     purchase_order_page.fill(f"#orderTotal{index}", str(total))
-    purchase_order_page.query_selector(f"#agent{index}").select_option(str(agent))
+    purchase_order_page.locator(f"#agent{index}").select_option(str(agent))
 
 
 def challenge_verification(purchase_order_page):
