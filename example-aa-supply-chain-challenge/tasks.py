@@ -42,7 +42,7 @@ def open_po_page():
 
 
 def get_agents(purchase_order_page):
-    download_xlsx_element = purchase_order_page.query_selector(".challenge-intro a.btn")
+    download_xlsx_element = purchase_order_page.locator(".challenge-intro a.btn")
     csv_url = download_xlsx_element.get_attribute("href")
     HTTP().download(csv_url, EXCEL_PATH, overwrite=True)
     df_agents = pl.read_excel(EXCEL_PATH)
@@ -99,7 +99,7 @@ def fill_po_form(index, ship_date, total, agent, purchase_order_page):
     # purchase_order_page.bring_to_front()
     purchase_order_page.fill(f"#shipDate{index}", str(ship_date))
     purchase_order_page.fill(f"#orderTotal{index}", str(total))
-    purchase_order_page.query_selector(f"#agent{index}").select_option(str(agent))
+    purchase_order_page.locator(f"#agent{index}").select_option(str(agent))
 
 
 def challenge_verification(purchase_order_page):

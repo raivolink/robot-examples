@@ -1,4 +1,4 @@
 example-parse-msg-files
 .vscode
 log.html
-.mypy*
+.mypy_cache

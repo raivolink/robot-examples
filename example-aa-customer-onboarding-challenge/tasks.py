@@ -26,7 +26,7 @@ def launch_browser_and_open_challenge():
     browser.configure(
         browser_engine="chromium",
         screenshot="only-on-failure",
-        headless=True,
+        headless=False,
     )
     # user_agent is needed for headless runs
     user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -51,7 +51,7 @@ def fill_and_submit_form(customer):
     page.fill("#city", str(customer["City"]))
     page.fill("#zip", str(customer["Zip"]))
     page.fill("#email", str(customer["Email Address"]))
-    page.query_selector("#state").select_option(str(customer["State"]))
+    page.locator("#state").select_option(str(customer["State"]))
     if str(customer["Offers Discounts"]) == "YES":
         page.locator("#activeDiscountYes").check()
     else:
@@ -63,7 +63,7 @@ def fill_and_submit_form(customer):
 
 def get_customers_data():
     page = browser.page()
-    download_csv_element = page.query_selector("css=p.lead a")
+    download_csv_element = page.locator("css=p.lead a")
     csv_url = download_csv_element.get_attribute("href")
     HTTP().download(csv_url, CSV_PATH, overwrite=True)
     df_customers = pl.read_csv(CSV_PATH)

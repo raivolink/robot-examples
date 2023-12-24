@@ -1,11 +1,11 @@
 from robocorp import browser
 from robocorp.tasks import task
+from playwright.sync_api import Page
 
 
 CHALLENGE_URL = "https://developer.automationanywhere.com/challenges/automationanywherelabs-quarterclose.html"
 
 
-# TODO group by account for better performance?
 @task
 def solve_challenge():
     """Complete Close quarter challenge"""
@@ -17,7 +17,7 @@ def solve_challenge():
     submit_challenge()
 
 
-def launch_browser():
+def launch_browser() -> None:
     browser.configure(
         browser_engine="chromium",
         screenshot="only-on-failure",
@@ -29,25 +29,33 @@ def launch_browser():
     context.set_extra_http_headers({"User-Agent": user_agent})
 
 
-def open_transaction_website():
+def open_transaction_website() -> None:
     browser.goto(CHALLENGE_URL)
     transaction_page = browser.page()
     transaction_page.click("#onetrust-accept-btn-handler", no_wait_after=True)
 
 
-def get_transactions():
+def get_transactions() -> list:
+    """
+    Collects initial transaction data
+
+    Returns:
+        list: Collected accounts and amounts
+    """
     page = browser.page()
     transaction_data = []
     transaction_list = page.locator('css=div[id^="transaction"]').all()
     for index, transaction in enumerate(transaction_list, start=1):
         account = page.locator(f"#PaymentAccount{index}").input_value()
         amount = page.locator(f"#PaymentAmount{index}").input_value()
-        transaction = {"id": index, "Account": account, "Amount": amount}
-        transaction_data.append(transaction)
+        current_transaction = {"id": index, "Account": account, "Amount": amount}
+        transaction_data.append(current_transaction)
+    # sort accounts
+    transaction_data = sorted(transaction_data, key=lambda d: d["Account"])
     return transaction_data
 
 
-def open_bank_page_and_log_in():
+def open_bank_page_and_log_in() -> Page:
     page = browser.page()
     context = browser.context()
     with context.expect_page() as new_page:
@@ -59,20 +67,34 @@ def open_bank_page_and_log_in():
     return bank_page
 
 
-def open_account_page(bank_page, account):
+def open_account_page(bank_page: Page, account: str) -> None:
     bank_page.click(f"css=a >> text={account}")
 
 
-def search_transaction(bank_page, amount):
+def search_transaction(bank_page: Page, amount: str) -> None:
     search_input = bank_page.locator(".datatable-search > .datatable-input")
+    search_input.fill("")
     search_input.press_sequentially(amount)
     search_input.press("Enter")
 
 
-def match_transactions(transaction_data):
+def match_transactions(transaction_data: list) -> list:
+    """
+    Matches transactions on bank pages, when found marks as
+    Verified. If transaction is not found marks as Unverified
+
+    Args:
+        transaction_data (list): Data collected from transaction page
+
+    Returns:
+        lisy: Transaction date with updated statuses.
+    """
     bank_page = open_bank_page_and_log_in()
+    current_account = ""
     for index, transaction in enumerate(transaction_data):
-        open_account_page(bank_page, transaction["Account"])
+        if current_account != transaction["Account"]:
+            open_account_page(bank_page, transaction["Account"])
+            current_account = transaction["Account"]
         search_transaction(bank_page, transaction["Amount"])
         if bank_page.locator("text=Showing 1 to 1 of 1 entries").is_visible():
             transaction_data[index]["Status"] = "Verified"
@@ -81,18 +103,17 @@ def match_transactions(transaction_data):
     return transaction_data
 
 
-def update_transaction_statuses(transaction_data):
+def update_transaction_statuses(transaction_data: list) -> None:
     page = browser.page()
     page.bring_to_front()
     for transaction in transaction_data:
-        # print(f'css=#transaction{transaction["id"]} select[id^="Status"]')
         page.select_option(
             f'css=#transaction{transaction["id"]} select[id^="Status"]',
             transaction["Status"],
         )
 
 
-def submit_challenge():
+def submit_challenge() -> None:
     """Submits challenge, takes result screenshot and
     logs completion id to the log
     """
