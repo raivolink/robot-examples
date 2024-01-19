@@ -1,8 +1,8 @@
-from robocorp import browser, log
 from pathlib import Path
-import polars as pl
-from robocorp.tasks import get_output_dir, task
 
+import polars as pl
+from robocorp import browser, log
+from robocorp.tasks import get_output_dir, task
 from RPA.HTTP import HTTP
 
 OUTPUT_DIR = get_output_dir() or Path("output")
