@@ -1,12 +1,14 @@
 from pathlib import Path
 
 import polars as pl
+import requests
+from polars import DataFrame
 from robocorp import browser, log
 from robocorp.tasks import get_output_dir, task
-from RPA.HTTP import HTTP
 
 OUTPUT_DIR = get_output_dir() or Path("output")
-CSV_PATH = OUTPUT_DIR / "customers.csv"
+TARGET_FILENAME = "customers.csv"
+CSV_PATH = OUTPUT_DIR
 URL = "https://developer.automationanywhere.com/challenges/automationanywherelabs-customeronboarding.html"
 
 
@@ -61,19 +63,36 @@ def fill_and_submit_form(customer):
     page.locator("#submit_button").click(force=True, no_wait_after=True)
 
 
-def get_customers_data():
+def get_customers_data() -> DataFrame:
     page = browser.page()
     download_csv_element = page.locator("css=p.lead a")
     csv_url = download_csv_element.get_attribute("href")
-    HTTP().download(csv_url, CSV_PATH, overwrite=True)
-    df_customers = pl.read_csv(CSV_PATH)
+    local_filename = download_file(csv_url, CSV_PATH, TARGET_FILENAME)
+    df_customers = pl.read_csv(local_filename)
     return df_customers
 
 
 def challenge_verification():
+    """
+    Verifies challenge results by taking result screenshot
+    Logs challenge id info
+    """
     page = browser.page()
     page.wait_for_selector("css=.modal-body")
     completion_modal = page.locator("css=.modal-body")
     browser.screenshot(completion_modal)
     completion_id = page.locator("id=guidvalue").input_value()
     log.info(f"Challenge completion id: {completion_id}")
+
+
+def download_file(url: str, target_dir: Path, target_filename: str) -> str:
+    """
+    Downloads a file from the given url into the given folder with given filename.
+    """
+    target_dir.mkdir(exist_ok=True)
+    response = requests.get(url)
+    response.raise_for_status()  # This will raise an exception if the request fails
+    local_filename = Path(target_dir, target_filename)
+    with open(local_filename, "wb") as f:
+        f.write(response.content)  # Write the content of the response to a file
+    return local_filename
