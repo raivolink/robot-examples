@@ -10,7 +10,7 @@ import sqlite3
 
 from robocorp.actions import action
 
-from utils import file_utils
+from utils import files
 
 
 @action
@@ -31,7 +31,7 @@ def get_customer(first_name: str) -> str:
     cursor = conn.cursor()
 
     # Create query to retrieve customer information
-    sql_query = file_utils.read_query_file("queries/get_customer.sql")
+    sql_query = files.read_query_file("queries/get_customer.sql")
     # Execute a SELECT query to retrieve customer information
     cursor.execute(sql_query, (first_name + "%",))
 
@@ -72,7 +72,7 @@ def get_order_details(company_name: str) -> str:
     cursor = conn.cursor()
 
     # Create query to retrieve customer information
-    sql_query = file_utils.read_query_file("queries/get_order_details.sql")
+    sql_query = files.read_query_file("queries/get_order_details.sql")
     # Execute a query
     cursor.execute(sql_query, (company_name,))
 
