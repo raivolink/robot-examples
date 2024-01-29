@@ -38,13 +38,30 @@ def launch_browser_and_open_challenge():
     browser.goto(URL)
 
 
-def complete_challenge(df_customers):
-    # fill data to crm
+def complete_challenge(df_customers: pl.DataFrame) -> None:
+    """
+    Fill the customer data to the CRM form.
+
+    Args:
+        df_customers (pl.DataFrame): The customer data as a Polars DataFrame.
+
+    Returns:
+        None
+    """
     for customer in df_customers.rows(named=True):
         fill_and_submit_form(customer)
 
 
-def fill_and_submit_form(customer):
+def fill_and_submit_form(customer: dict) -> None:
+    """
+    Fill the customer data to the CRM form.
+
+    Args:
+        customer (dict): The customer data as a dictionary.
+
+    Returns:
+        None
+    """
     page = browser.page()
     page.fill("#customerName", str(customer["Company Name"]))
     page.fill("#customerID", str(customer["Customer ID"]))
