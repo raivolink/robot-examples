@@ -1,7 +1,8 @@
-from robocorp import browser, vault, storage, log
-from robocorp.tasks import task
-import openai
 import json
+
+import openai
+from robocorp import browser, log, storage, vault
+from robocorp.tasks import task
 
 CHALLENGE_URL = (
     "https://developer.automationanywhere.com/challenges/healthcare-ai-challenge.html"
@@ -173,4 +174,5 @@ def submit_challenge():
     completion_modal = page.locator("css=.modal-body")
     browser.screenshot(completion_modal)
     completion_id = page.locator("id=guidvalue").input_value()
+    log.info(f"Completion id: {completion_id}")
     log.info(f"Completion id: {completion_id}")

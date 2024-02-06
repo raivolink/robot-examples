@@ -7,7 +7,7 @@ CHALLENGE_URL = "https://developer.automationanywhere.com/challenges/automationa
 
 @task
 def solve_challenge():
-    """Completes Close quarter challenge"""
+    """Complete Close quarter challenge"""
     launch_browser()
     open_transaction_website()
     transaction_data = get_transactions()
@@ -16,7 +16,7 @@ def solve_challenge():
     submit_challenge()
 
 
-def launch_browser():
+def launch_browser() -> None:
     browser.configure(
         browser_engine="chromium",
         screenshot="only-on-failure",
@@ -28,7 +28,7 @@ def launch_browser():
     context.set_extra_http_headers({"User-Agent": user_agent})
 
 
-def open_transaction_website():
+def open_transaction_website() -> None:
     browser.goto(CHALLENGE_URL)
     transaction_page = browser.page()
     transaction_page.click("#onetrust-accept-btn-handler", no_wait_after=True)
@@ -55,12 +55,6 @@ def get_transactions() -> list:
 
 
 def open_bank_page_and_log_in() -> Page:
-    """
-    Opens banks page and inserts account credentials
-
-    Returns:
-        Page: Bank page id
-    """
     page = browser.page()
     context = browser.context()
     with context.expect_page() as new_page:
@@ -72,11 +66,11 @@ def open_bank_page_and_log_in() -> Page:
     return bank_page
 
 
-def open_account_page(bank_page: Page, account: str):
+def open_account_page(bank_page: Page, account: str) -> None:
     bank_page.click(f"css=a >> text={account}")
 
 
-def search_transaction(bank_page: Page, amount: str):
+def search_transaction(bank_page: Page, amount: str) -> None:
     search_input = bank_page.locator(".datatable-search > .datatable-input")
     search_input.fill("")
     search_input.press_sequentially(amount)
@@ -108,7 +102,7 @@ def match_transactions(transaction_data: list) -> list:
     return transaction_data
 
 
-def update_transaction_statuses(transaction_data: list):
+def update_transaction_statuses(transaction_data: list) -> None:
     page = browser.page()
     page.bring_to_front()
     for transaction in transaction_data:
@@ -118,7 +112,7 @@ def update_transaction_statuses(transaction_data: list):
         )
 
 
-def submit_challenge():
+def submit_challenge() -> None:
     """Submits challenge, takes result screenshot and
     logs completion id to the log
     """
