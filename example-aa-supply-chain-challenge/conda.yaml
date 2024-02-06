@@ -6,11 +6,11 @@ channels:
   - conda-forge
 
 dependencies:
-  - python=3.10.12                # https://pyreadiness.org/3.10
+  - python=3.10.13                # https://pyreadiness.org/3.10
   - pip=23.2.1                    # https://pip.pypa.io/en/stable/news
   - robocorp-truststore=0.8.0     # https://pypi.org/project/robocorp-truststore/
-  - polars=0.20.5                 # https://pypi.org/project/polars/
+  - polars=0.20.7                 # https://pypi.org/project/polars/
   - pip:
-    - robocorp==1.5.0             # https://pypi.org/project/robocorp
+    - robocorp==1.6.1             # https://pypi.org/project/robocorp
     - robocorp-browser==2.2.2     # https://pypi.org/project/robocorp-browser
     - xlsx2csv==0.8.2             # https://pypi.org/project/xlsx2csv/ Required for Polars and excel files
