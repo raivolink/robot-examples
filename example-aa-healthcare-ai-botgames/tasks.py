@@ -1,13 +1,15 @@
 import json
 
-import openai
+from openai import OpenAI
 from robocorp import browser, log, storage, vault
+from robocorp.browser import Page
 from robocorp.tasks import task
 
 CHALLENGE_URL = (
     "https://developer.automationanywhere.com/challenges/healthcare-ai-challenge.html"
 )
 VAULT_SECRET = "OpenAI"
+AA_CREDENTIALS = "AA_community"
 gpt_model = "gpt-3.5-turbo"
 
 
@@ -20,6 +22,7 @@ def solve_ai_challenge():
     inserted to Medikorps portal.
     """
     start_ai_challenge()
+    login_to_aa()
     mailbox_page = open_mailbox()
     patient_cases = get_unread_mail_content(mailbox_page)
     patient_cases = get_structured_data_from_gpt(patient_cases)
@@ -28,7 +31,7 @@ def solve_ai_challenge():
     log.console_message("Challenge completed", "regular")
 
 
-def start_ai_challenge():
+def start_ai_challenge() -> None:
     """Launches browser and opens challenge page"""
     browser.configure(
         browser_engine="chromium",
@@ -41,7 +44,7 @@ def start_ai_challenge():
     browser.goto(CHALLENGE_URL)
 
 
-def open_mailbox():
+def open_mailbox() -> Page:
     """Opens mailbox page
 
     Returns:
@@ -58,7 +61,7 @@ def open_mailbox():
     return mailbox_page
 
 
-def get_unread_mail_content(mailbox_page):
+def get_unread_mail_content(mailbox_page: Page) -> None:
     """Gets unread mails from mailbox and read data from them
 
     Args:
@@ -81,12 +84,17 @@ def get_unread_mail_content(mailbox_page):
     return patient_cases
 
 
-def authorize_openai():
+def authorize_openai() -> None:
     """Retrieves api key from vault and authorizes
     gpt usage.
     """
     secrets_container = vault.get_secret(VAULT_SECRET)
-    openai.api_key = secrets_container["key"]
+    client = OpenAI(
+        api_key=secrets_container[
+            "api-key"
+        ],  # this is also the default, it can be omitted
+    )
+    return client
 
 
 def ask_gpt(conversation):
@@ -98,7 +106,8 @@ def ask_gpt(conversation):
     Returns:
         OpenAIObject: Gpt conversation
     """
-    response = openai.ChatCompletion.create(
+    client = authorize_openai()
+    response = client.completions.create(
         model=gpt_model,
         messages=conversation,
         temperature=1,
@@ -109,7 +118,7 @@ def ask_gpt(conversation):
     return response
 
 
-def get_structured_data_from_gpt(patient_cases):
+def get_structured_data_from_gpt(patient_cases: list[str]) -> list[str]:
     """Sends doctors note to gpt to get structured
     patient diagnosis data
 
@@ -134,7 +143,7 @@ def get_structured_data_from_gpt(patient_cases):
     return patient_cases
 
 
-def fill_patient_data(patient_cases):
+def fill_patient_data(patient_cases) -> None:
     """Fills patient data with data from doctors note.
 
     Args:
@@ -163,7 +172,7 @@ def fill_patient_data(patient_cases):
         page.click("id=add_button")
 
 
-def submit_challenge():
+def submit_challenge() -> None:
     """Submits challenge, takes result screenshot and
     logs completion id to the log
     """
@@ -176,3 +185,21 @@ def submit_challenge():
     completion_id = page.locator("id=guidvalue").input_value()
     log.info(f"Completion id: {completion_id}")
     log.info(f"Completion id: {completion_id}")
+
+
+def login_to_aa() -> None:
+    """
+    Handles initial login to AA challanges site
+    """
+    credentials_container = vault.get_secret(AA_CREDENTIALS)
+    page = browser.page()
+    page.locator("#onetrust-accept-btn-handler").click()
+    page.locator("xpath=//button[contains(.,'Community login')]").click()
+    page.locator("xpath=//label[contains(.,'Email')]/../input").fill(
+        credentials_container["user"]
+    )
+    page.locator("xpath=//button[contains(.,'Next')]").click()
+    page.locator("xpath=//label[contains(.,'Password')]/../input").fill(
+        credentials_container["password"]
+    )
+    page.locator("xpath=//button[contains(.,'Log in')]").click()

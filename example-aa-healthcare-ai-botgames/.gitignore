@@ -15,5 +15,5 @@ temp/
 testrun/*
 .~lock*
 *.pkl
-
+open_ai_test*
 challenge.xlsx
