@@ -89,7 +89,7 @@ def get_customers_data() -> DataFrame:
     return df_customers
 
 
-def challenge_verification():
+def challenge_verification() -> None:
     """
     Verifies challenge results by taking result screenshot
     Logs challenge id info
